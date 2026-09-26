@@ -7,9 +7,9 @@ import { GlassCard } from '../ui/GlassCard';
 import { GlowButton } from '../ui/GlowButton';
 import { PERSONAL_INFO } from '@/lib/constants';
 
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_d6h6xgl';
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_swp5um8';
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'BNiQ4QpdwAkXIeVbQ';
 
 type SendStatus = 'idle' | 'sending' | 'success' | 'error';
 
@@ -39,22 +39,36 @@ export function ContactSection() {
       return;
     }
 
-    if (!formRef.current) return;
-
     setStatus('sending');
     setErrorMessage('');
 
     try {
-      await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, formRef.current, {
-        publicKey: EMAILJS_PUBLIC_KEY,
-      });
+      // Send with fallback keys and comprehensive field mappings for EmailJS templates
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: formData.name,
+          name: formData.name,
+          user_name: formData.name,
+          from_email: formData.email,
+          reply_to: formData.email,
+          email: formData.email,
+          user_email: formData.email,
+          title: formData.title,
+          subject: formData.title,
+          message: formData.message,
+        },
+        EMAILJS_PUBLIC_KEY
+      );
       setStatus('success');
       setFormData({ name: '', email: '', title: '', message: '' });
-      formRef.current.reset();
+      if (formRef.current) formRef.current.reset();
       setTimeout(() => setStatus('idle'), 5000);
-    } catch (error) {
-      console.error('EmailJS sendForm failed:', error);
-      setErrorMessage('TRANSMISSION FAILED. PLEASE TRY AGAIN.');
+    } catch (error: any) {
+      console.error('EmailJS send failed:', error);
+      const detailMsg = error?.text || error?.message || '';
+      setErrorMessage(detailMsg ? `TRANSMISSION FAILED: ${detailMsg}` : 'TRANSMISSION FAILED. PLEASE TRY AGAIN.');
       setStatus('error');
     }
   };
