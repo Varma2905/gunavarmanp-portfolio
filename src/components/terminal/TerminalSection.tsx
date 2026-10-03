@@ -631,7 +631,7 @@ export function TerminalSection() {
   };
 
   return (
-    <section id="terminal" ref={sectionRef} className="py-24 relative z-10">
+    <section id="terminal" ref={sectionRef} className="py-24 relative z-10 scroll-mt-24 sm:scroll-mt-28">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading
           badge="07 // SECURE CHANNEL"

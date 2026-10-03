@@ -24,7 +24,7 @@ const POWER_CLASSES: { key: string; label: string; blurb: string; categories: st
 
 export function SkillsSection() {
   return (
-    <section id="skills" className="py-24 relative z-10">
+    <section id="skills" className="py-24 relative z-10 scroll-mt-24 sm:scroll-mt-28">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading
           badge="02 // POWER MATRIX"
@@ -95,9 +95,7 @@ export function SkillsSection() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.6 }}
-        /* Full-bleed breakout: the section's own container is max-w-7xl,
-           but the marquee lanes need to span the entire viewport width. */
-        className="relative left-1/2 w-screen -translate-x-1/2 space-y-4 sm:space-y-5"
+        className="w-full max-w-full overflow-hidden space-y-4 sm:space-y-5"
       >
         {MARQUEE_ROWS.map((row, idx) => (
           <SkillMarqueeRow key={idx} skills={row.skills} direction={row.direction} speed={row.speed} />

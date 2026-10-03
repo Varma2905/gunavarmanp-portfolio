@@ -19,7 +19,7 @@ export function BlogSection() {
   });
 
   return (
-    <section id="blog" className="py-24 relative z-10">
+    <section id="blog" className="py-24 relative z-10 scroll-mt-24 sm:scroll-mt-28">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading
           badge="06 // FIELD NOTES"

@@ -297,14 +297,25 @@ export function GlobalSpiderMan({ frontImage }: GlobalSpiderManProps) {
       renderFrame();
     };
 
+    let updateScheduled = false;
+    const handleAnchorUpdate = () => {
+      if (!updateScheduled) {
+        updateScheduled = true;
+        requestAnimationFrame(() => {
+          updateScheduled = false;
+          updateAnchor();
+        });
+      }
+    };
+
     updateAnchor();
 
-    window.addEventListener("resize", updateAnchor);
-    window.addEventListener("scroll", updateAnchor);
+    window.addEventListener("resize", handleAnchorUpdate, { passive: true });
+    window.addEventListener("scroll", handleAnchorUpdate, { passive: true });
 
     return () => {
-      window.removeEventListener("resize", updateAnchor);
-      window.removeEventListener("scroll", updateAnchor);
+      window.removeEventListener("resize", handleAnchorUpdate);
+      window.removeEventListener("scroll", handleAnchorUpdate);
     };
   }, []);
 
@@ -514,8 +525,8 @@ export function GlobalSpiderMan({ frontImage }: GlobalSpiderManProps) {
         style={{
           position: "fixed",
           inset: 0,
-          width: "100vw",
-          height: "100vh",
+          width: "100%",
+          height: "100%",
           overflow: "visible",
           pointerEvents: "none",
           zIndex: 9997,

@@ -26,7 +26,7 @@ export function ProjectsSection() {
       );
 
   return (
-    <section id="projects" className="py-24 relative z-10">
+    <section id="projects" className="py-24 relative z-10 scroll-mt-24 sm:scroll-mt-28">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading
           badge="03 // MISSION LOG"

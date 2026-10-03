@@ -38,9 +38,12 @@ html, body {
   overflow-x: hidden;
   scroll-behavior: smooth;
   scroll-padding-top: 90px;
-  overscroll-behavior-y: none;
+  overscroll-behavior-y: auto;
+  touch-action: pan-y;
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* The global `cursor: none` above (for the custom cursor) has zero

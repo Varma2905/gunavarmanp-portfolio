@@ -9,6 +9,9 @@ export function ParticleField() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     let animationFrameId: number;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
@@ -18,7 +21,7 @@ export function ParticleField() {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
 
     const particles: Array<{
       x: number;
@@ -29,14 +32,15 @@ export function ParticleField() {
       alpha: number;
     }> = [];
 
-    const numParticles = Math.min(Math.floor((width * height) / 12000), 100);
+    const cap = isCoarse ? 24 : 75;
+    const numParticles = Math.min(Math.floor((width * height) / 18000), cap);
 
     for (let i = 0; i < numParticles; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
         size: Math.random() * 2 + 1,
         alpha: Math.random() * 0.6 + 0.2,
       });
@@ -44,6 +48,14 @@ export function ParticleField() {
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
+
+      // Disable canvas shadowBlur on mobile devices for smooth 60fps rendering
+      if (!isCoarse) {
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = '#e62429';
+      } else {
+        ctx.shadowBlur = 0;
+      }
 
       particles.forEach((p, i) => {
         p.x += p.vx;
@@ -57,36 +69,38 @@ export function ParticleField() {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(230,36,41,${p.alpha})`;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = '#e62429';
         ctx.fill();
 
-        // Draw light connection lines for nearby particles
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const dx = p.x - p2.x;
-          const dy = p.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+        // Skip O(N^2) link calculations on touch devices to save mobile CPU/GPU
+        if (!isCoarse) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 110) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(255, 59, 63, ${0.15 * (1 - dist / 110)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+            if (dist < 100) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(255, 59, 63, ${0.12 * (1 - dist / 100)})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
       });
 
-      animationFrameId = requestAnimationFrame(render);
+      if (!reducedMotion) {
+        animationFrameId = requestAnimationFrame(render);
+      }
     };
 
     render();
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
   }, []);
 

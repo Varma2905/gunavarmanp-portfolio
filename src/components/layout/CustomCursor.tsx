@@ -7,6 +7,10 @@ export function CustomCursor() {
   const [isMouseDown, setIsMouseDown] = useState(false);
 
   useEffect(() => {
+    if (window.matchMedia('(pointer: coarse)').matches) {
+      return;
+    }
+
     const onMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
 
@@ -18,9 +22,9 @@ export function CustomCursor() {
     const onMouseDown = () => setIsMouseDown(true);
     const onMouseUp = () => setIsMouseDown(false);
 
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('mousedown', onMouseDown, { passive: true });
+    window.addEventListener('mouseup', onMouseUp, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);

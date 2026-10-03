@@ -59,7 +59,7 @@ export function ContactSection() {
           subject: formData.title,
           message: formData.message,
         },
-        EMAILJS_PUBLIC_KEY
+        { publicKey: EMAILJS_PUBLIC_KEY }
       );
       setStatus('success');
       setFormData({ name: '', email: '', title: '', message: '' });
@@ -74,7 +74,7 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-24 relative z-10">
+    <section id="contact" className="py-24 relative z-10 scroll-mt-24 sm:scroll-mt-28">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading
           badge="08 // SEND A SIGNAL"

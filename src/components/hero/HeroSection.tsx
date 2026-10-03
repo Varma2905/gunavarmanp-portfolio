@@ -11,7 +11,7 @@ const socialLinkStyles =
 
 export function HeroSection() {
   return (
-    <section id="home" className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative min-h-screen scroll-mt-24 sm:scroll-mt-28 pt-28 pb-16 flex items-center justify-center overflow-hidden">
       {/* Hero-local web threads + ambient glow */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute inset-0 web-radial opacity-30 [mask-image:radial-gradient(ellipse_60%_60%_at_50%_40%,#000_25%,transparent_100%)]" />

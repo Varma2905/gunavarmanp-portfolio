@@ -63,7 +63,7 @@ function SkillMarqueeCard({ skill, decorative = false }: { skill: SkillGridItem;
     <div
       role={decorative ? undefined : 'listitem'}
       aria-hidden={decorative || undefined}
-      className="web-mesh group relative flex h-24 w-28 shrink-0 flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border border-spider-red/25 bg-white/[0.03] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-spider-red/70 hover:bg-spider-red/10 hover:shadow-[0_0_24px_rgba(230,36,41,0.35)] sm:h-28 sm:w-32 md:w-36"
+      className="web-mesh group relative flex h-24 w-28 shrink-0 flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border border-spider-red/25 bg-[#0a0c14]/85 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-spider-red/70 hover:bg-spider-red/20 hover:shadow-[0_0_24px_rgba(230,36,41,0.35)] sm:h-28 sm:w-32 md:w-36"
     >
       <span className="web-shot left-0 right-0 top-1/2" />
       <SkillIcon icon={skill.icon} label={skill.name} size="h-8 w-8 sm:h-9 sm:w-9" />
